@@ -1,0 +1,45 @@
+diff -ru old/CMakeLists.txt new/CMakeLists.txt
+--- old/CMakeLists.txt	2022-02-28 20:19:15.715276600 +0100
++++ new/CMakeLists.txt	2022-08-04 21:52:53.152470615 +0200
+@@ -37,6 +37,7 @@
+ if (UNIX)
+ 	# configure sensible warnings
+ 	add_compile_options(
++                        -Wno-error=format-security
+ 			-Wno-unknown-pragmas            # MSVC specific pragmas
+ 			-Wno-unused-variable            # too many
+ 			-Wno-unused-but-set-variable
+@@ -268,19 +269,6 @@
+ 	set_target_properties(TheDarkMod PROPERTIES WIN32_EXECUTABLE TRUE)
+ elseif (UNIX)
+ 	target_link_libraries(TheDarkMod pthread dl stdc++fs X11 Xext Xxf86vm)
+-	# strip debug symbols from executable and put them into a separate symbols file
+-	add_custom_command(
+-			TARGET TheDarkMod POST_BUILD
+-			COMMAND objcopy --only-keep-debug "$<TARGET_FILE:TheDarkMod>" "$<TARGET_FILE:TheDarkMod>.debug"
+-	)
+-	add_custom_command(
+-			TARGET TheDarkMod POST_BUILD
+-			COMMAND strip --strip-debug --strip-unneeded "$<TARGET_FILE:TheDarkMod>"
+-	)
+-	add_custom_command(
+-			TARGET TheDarkMod POST_BUILD
+-			COMMAND objcopy "--add-gnu-debuglink=$<TARGET_FILE:TheDarkMod>.debug" "$<TARGET_FILE:TheDarkMod>"
+-	)
+ endif ()
+ 
+ if (COPY_EXE)
+Only in new: fms
+Only in new/idlib: svnversion.h
+diff -ru old/ThirdParty/artefacts/doctest/include/doctest/doctest.h new/ThirdParty/artefacts/doctest/include/doctest/doctest.h
+--- old/ThirdParty/artefacts/doctest/include/doctest/doctest.h	2022-02-28 20:19:19.518716700 +0100
++++ new/ThirdParty/artefacts/doctest/include/doctest/doctest.h	2022-08-04 21:28:37.133139237 +0200
+@@ -3995,7 +3995,7 @@
+         static bool             isSet;
+         static struct sigaction oldSigActions[DOCTEST_COUNTOF(signalDefs)];
+         static stack_t          oldSigStack;
+-        static char             altStackMem[4 * SIGSTKSZ];
++        static char             altStackMem[32768];
+ 
+         static void handleSignal(int sig) {
+             const char* name = "<unknown signal>";
