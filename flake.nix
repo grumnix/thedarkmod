@@ -5,9 +5,12 @@
 
     thedarkmod_src.url = "https://www.thedarkmod.com/sources/thedarkmod.2.10.src.7z";
     thedarkmod_src.flake = false;
+
+    darkradiant_src.url = "github:codereader/DarkRadiant?ref=3.0.0";
+    darkradiant_src.flake = false;
   };
 
-  outputs = { self, nixpkgs, flake-utils, thedarkmod_src }:
+  outputs = { self, nixpkgs, flake-utils, thedarkmod_src, darkradiant_src }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
@@ -39,6 +42,36 @@
               xorg.xorgproto
               xorg.libX11.dev
               xorg.libXext.dev
+            ];
+          };
+
+          darkradiant = pkgs.stdenv.mkDerivation {
+            pname = "darkradiant";
+            version = "3.0.0";
+            src = darkradiant_src;
+            nativeBuildInputs = with pkgs; [
+              cmake
+              pkgconfig
+            ];
+            buildInputs = with pkgs; [
+              eigen
+              freealut
+              freetype
+              ftgl
+              glew
+              glib
+              gtest
+              libgit2
+              libjpeg
+              libpng
+              libsigcxx
+              libvorbis
+              libxml2
+              openal
+              python
+              wxGTK30
+              xorg.libX11.dev
+              zlib
             ];
           };
         };

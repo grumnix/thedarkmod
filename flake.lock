@@ -1,5 +1,22 @@
 {
   "nodes": {
+    "darkradiant_src": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1655297034,
+        "narHash": "sha256-euYCmr0rVTAaUqFbdLUu8LrUxaGeFM/7jeyJsbC9BsA=",
+        "owner": "codereader",
+        "repo": "DarkRadiant",
+        "rev": "78cd19f755d10dc64d46768af8633d9bc7aa3982",
+        "type": "github"
+      },
+      "original": {
+        "owner": "codereader",
+        "ref": "3.0.0",
+        "repo": "DarkRadiant",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1656928814,
@@ -33,6 +50,7 @@
     },
     "root": {
       "inputs": {
+        "darkradiant_src": "darkradiant_src",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
         "thedarkmod_src": "thedarkmod_src"
