@@ -26,7 +26,9 @@
             cmakeFlags = [ "-DCOPY_EXE=OFF" ];
             installPhase = ''
               mkdir -p $out/bin/
+              mkdir -p $out/share/thedarkmod/
               cp -v thedarkmod.x64 $out/bin/
+              cp -rv ../glprogs $out/share/thedarkmod/
             '';
             nativeBuildInputs = with pkgs; [
               cmake
