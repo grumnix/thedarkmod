@@ -60,7 +60,7 @@
               ftgl
               glew
               glib
-              gtest
+              # gtest
               libgit2
               libjpeg
               libpng
