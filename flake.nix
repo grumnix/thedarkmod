@@ -54,6 +54,7 @@
               pkgconfig
             ];
             buildInputs = with pkgs; [
+              asciidoctor
               eigen
               freealut
               freetype
@@ -70,7 +71,8 @@
               openal
               python
               wxGTK30
-              xorg.libX11.dev
+              xorg.libX11
+              xorg.libXau
               zlib
             ];
           };
