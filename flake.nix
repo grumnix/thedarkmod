@@ -1,7 +1,14 @@
 {
+  # nix run --no-write-lock-file --impure github:guibou/nixGL#nixGLIntel ./thedarkmod.x64
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
     flake-utils.url = "github:numtide/flake-utils";
+
+    # tdm_installer_src.url = "https://update.thedarkmod.com/zipsync/tdm_installer.linux64.zip";
+    # tdm_installer_src.flake = false;
+
+    # http://darkmod.taaaki.za.net/release/zipsync/release/release200/manifest.iniz
 
     thedarkmod_src.url = "https://www.thedarkmod.com/sources/thedarkmod.2.10.src.7z";
     thedarkmod_src.flake = false;
@@ -17,6 +24,42 @@
       in rec {
         packages = flake-utils.lib.flattenTree rec {
           default = thedarkmod;
+
+          tdm_installer = pkgs.stdenv.mkDerivation {
+            name = "tdm_installer";
+            src = pkgs.fetchzip {
+              name = "tdm_installer";
+              url = "https://update.thedarkmod.com/zipsync/tdm_installer.linux64.zip";
+              sha256 = "sha256-myayxW9/OkPOIc+uCfdlULxr/3FRQAItbPiG8aMFcko=";
+              stripRoot = false;
+            };
+            buildPhase = ''
+              # do nothing
+            '';
+            installPhase = ''
+              mkdir -p $out/bin/
+              cp -v tdm_installer.linux64 $out/bin/
+              chmod +x $out/bin/tdm_installer.linux64
+            '';
+          };
+
+          tdm_installer_env = pkgs.buildFHSUserEnv {
+            name = "tdm_installer";
+            targetPkgs = pkgs: (with pkgs; [
+              xorg.libX11
+            ]) ++ [
+              tdm_installer
+            ];
+            # runScript = "/usr/bin/tdm_installer.linux64";
+          };
+
+          thedarkmod_env = pkgs.buildFHSUserEnv {
+            name = "thedarkmod_env";
+            targetPkgs = pkgs: (with pkgs; [
+              mesa
+              xorg.libX11
+            ]);
+          };
 
           thedarkmod = pkgs.stdenv.mkDerivation {
             pname = "thedarkmod";
