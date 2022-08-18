@@ -1,5 +1,6 @@
 {
   # nix run --no-write-lock-file --impure github:guibou/nixGL#nixGLIntel ./thedarkmod.x64
+  # https://svn.thedarkmod.com/publicsvn/darkmod_src/tags/2.10/
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
@@ -51,14 +52,6 @@
               tdm_installer
             ];
             # runScript = "/usr/bin/tdm_installer.linux64";
-          };
-
-          thedarkmod_env = pkgs.buildFHSUserEnv {
-            name = "thedarkmod_env";
-            targetPkgs = pkgs: (with pkgs; [
-              mesa
-              xorg.libX11
-            ]);
           };
 
           thedarkmod = pkgs.stdenv.mkDerivation {
