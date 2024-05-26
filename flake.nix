@@ -3,7 +3,7 @@
   # https://svn.thedarkmod.com/publicsvn/darkmod_src/tags/2.10/
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-22.05";
+    nixpkgs.url = "github:NixOS/nixpkgs?ref=nixos-24.05";
     flake-utils.url = "github:numtide/flake-utils";
 
     # tdm_installer_src.url = "https://update.thedarkmod.com/zipsync/tdm_installer.linux64.zip";
@@ -23,7 +23,7 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
       in rec {
-        packages = flake-utils.lib.flattenTree rec {
+        packages = rec {
           default = thedarkmod;
 
           tdm_installer = pkgs.stdenv.mkDerivation {
@@ -71,7 +71,7 @@
             '';
             nativeBuildInputs = with pkgs; [
               cmake
-              pkgconfig
+              pkg-config
             ];
             buildInputs = with pkgs; [
               mesa
@@ -87,7 +87,7 @@
             src = darkradiant_src;
             nativeBuildInputs = with pkgs; [
               cmake
-              pkgconfig
+              pkg-config
             ];
             buildInputs = with pkgs; [
               asciidoctor
